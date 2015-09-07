@@ -16,12 +16,6 @@
             bottom: 0px;
         }
 
-        .pane {
-            max-height: 50px;
-            background-color: red;
-
-        }
-
         .img-rounded {
             width: 40px;
             height: 25px;
@@ -30,6 +24,11 @@
             padding-left: 0px;
             padding-right: 0px;
         }
+
+        .pane {
+            border: 1px solid black;
+            max-height: 50px;
+        }
         </style>
     </head>
     <body id="im">
@@ -37,8 +36,8 @@
         <div class="row">
             <div class="col-xs-3 col-md-2">
                 <div class="list-group">
-                    <a v-repeat="user in userList" class="list-group-item active"
-                        v-on="click:sendPrivateMessage(user)">{{ user.real_name }}
+                    <a v-repeat="user in userList" class="list-group-item" v-class="active : user.status"
+                        v-on="click:sendPrivateMessage(user)" >{{ user.real_name }}
                     </a>
                 </div>
             </div>
@@ -50,8 +49,8 @@
                                 <img class="img-rounded" src="[% asset('img/cowboy-icon.png') %]">{{ user }}
                             </div>
                             <div>
-                                {{ content }}
-                                <div class="col-md-1">
+                                <div>{{ content }}</div>
+                                <div class="col-md-1 pane" v-if="ticketInfo.name">
                                     <div>{{ticketInfo.name}}</div>
                                     <div >{{ticketInfo.desc}}</div>
                                 </div>

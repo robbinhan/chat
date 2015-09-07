@@ -1,12 +1,20 @@
 var io = require('socket.io')(8080);
+var sqlite3 = require('sqlite3').verbose();
+var clients = [];
 
 io.on('connection', function (socket) {
-
-  console.log('a user connected',socket.id);
+  var db = new sqlite3.Database('../storage/database.sqlite');
   //监听message事件
   socket.on('message', function (data) {
     //存储消息
     data.datetime = getDateTime();
+
+    db.serialize(function() {
+      var sql = "insert into messages values(null,'"+data.user+"','"+data.content+"','"+data.datetime+"','"+data.datetime+"')";
+      console.log("insert sql:",sql);
+      db.run(sql);
+    });
+
     //解析消息如果带#ht
     if (data.ticketId) {
       data.ticketInfo = {
@@ -15,14 +23,32 @@ io.on('connection', function (socket) {
         desc: '瞎签的'
       }
     }
-      
-    //分发给其他客户端
-    io.emit('message', data);
+
+    //发送私聊信息
+    if (data.sId) {
+      var sendSocket = clients[data.sId];
+      sendSocket.emit('message', data);
+    } else {
+      //分发给所有其他客户端
+      io.emit('message', data);
+    }
+  });
+
+  socket.on('disconnect', function () {
+    delete clients[socket.id];
+    console.log('user disconnected');
+    db.close();
   });
 
 
-  socket.on('disconnect', function () {
-    console.log('user disconnected');
+  //用户打开页面发送通知到服务端，有服务端转发通知其他客户端
+  socket.on('online',function  (data) {
+    //记录所有链接的client
+    clients[data.user] = socket;
+    console.log('a user connected',data.user);
+    //当用户连接后通知其他人
+    socket.emit('online','me'+data.user);// Send message to sender
+    socket.broadcast.emit('online',data);// Send message to everyone BUT sender
   });
 });
 
@@ -47,6 +73,6 @@ function getDateTime() {
     var day  = date.getDate();
     day = (day < 10 ? "0" : "") + day;
 
-    return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
+    return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
 
 }

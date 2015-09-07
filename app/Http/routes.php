@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use App\Message;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,7 @@ Route::get('/', function () {
 });
 
 
-get('/user',function () {
+get('/users',function () {
 	return response()->json(User::all());
 });
 
@@ -32,6 +33,10 @@ get('/user/tickets',function () {
 		// ],
 		// 'kq'=>[1=>'请假单1',2=>'请假单2']
 		]);
+});
+
+get('/messages',function () {
+	return response()->json(Message::all());
 });
 
 post('post/store', 'App\Http\Controllers\PostController@store');

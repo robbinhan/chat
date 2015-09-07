@@ -2,19 +2,10 @@ var socket = io('http://localhost:8080');
 
 Vue.config.debug = true // 开启调试模式
 
-
-/**
- * @todo 联系人列表 done
- * @todo  发送私信 done
- * @todo 上线下线提醒 delay
- * @todo 输入时添加命令支持，关联用户个人的流程单
- * @todo  arvater
- */
-
 var vm = new Vue({ 
 	el: '#im',
 	data: {
-		username: '匿名',//用户昵称
+		username: 'h5k87VhUoR',//用户昵称
 		postMessage: '',//输入框内容
 	    messages: [],//展示的消息列表
 	    userList: [],//联系人列表
@@ -39,7 +30,6 @@ var vm = new Vue({
 			//清空postMessage
 			this.postMessage = '';
 			
-			// this.messages.push(message);
 			//请求服务端分发消息
 			socket.emit('message', message);
 		},
@@ -61,12 +51,25 @@ var vm = new Vue({
 		}
 	},
 
+	/**
+	 * 初始化数据
+	 * @return {[type]} [description]
+	 */
 	ready: function() {
-
       	// GET request
-		this.$http.get('/user', function (data, status, request) {
-		  // set data on vm
-		  this.$set('userList', data)
+		this.$http.get('/users', function (data, status, request) {
+			// set data on vm
+			var userList = [];
+			data.forEach(function(user){
+				userList.push({real_name:user.real_name, status:0});
+			});
+			this.$set('userList', userList)
+			console.log(userList)
+			//随机选取username
+			var rand = parseInt(Math.random()*10);
+			this.username = this.userList[rand].real_name;
+			//请求服务端发送上线通知
+			socket.emit('online', {user:this.username});
 		}).error(function (data, status, request) {
 		  // handle error
 		})
@@ -75,6 +78,18 @@ var vm = new Vue({
 		this.$http.get('/user/tickets', function (data, status, request) {
 		  // set data on vm
 		  this.$set('userTickets', data)
+		}).error(function (data, status, request) {
+		  // handle error
+		})
+
+		// GET request
+		this.$http.get('/messages', function (data, status, request) {
+		  // set data on vm
+		  var messages = [];
+		  data.forEach(function (message) {
+		  	messages.push({user:message.username,content:message.content});
+		  })
+		  this.$set('messages', messages)
 		}).error(function (data, status, request) {
 		  // handle error
 		})
@@ -104,4 +119,16 @@ socket.on('message', function(msg){
 	console.log(msg);
 	//渲染显示消息内容在content里
   	vm.messages.push(msg);
+});
+
+//用户上线的通知
+socket.on('online', function(msg){
+	console.log('online',msg);
+	vm.userList.forEach(function(user,index){
+		if (user.real_name==msg.user) {
+			vm.userList[index].status = 1;
+		};
+	})
+	//渲染显示消息内容在content里
+  	// vm.messages.push(msg);
 });
