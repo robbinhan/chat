@@ -1,3 +1,4 @@
+// tutorial4.js
 var Comment = React.createClass({displayName: "Comment",
   render: function() {
     return (
@@ -15,8 +16,7 @@ var CommentList = React.createClass({displayName: "CommentList",
   render: function() {
     return (
       React.createElement("div", {className: "commentList"}, 
-        React.createElement(Comment, {author: "Pete Hunt"}, "This is one comment"), 
-        React.createElement(Comment, {author: "Jordan Walke"}, "This is *another* comment")
+        "Hello, world! I am a CommentList."
       )
     );
   }
@@ -32,6 +32,9 @@ var CommentForm = React.createClass({displayName: "CommentForm",
   }
 });
 
+
+
+// tutorial3.js
 var CommentBox = React.createClass({displayName: "CommentBox",
   render: function() {
     return (

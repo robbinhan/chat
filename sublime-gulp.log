@@ -1,0 +1,17 @@
+Remember that you can report errors and get help in https://github.com/NicoSantangelo/sublime-gulp
+
+09-25-2015 14:17:
+/Users/robbin/Library/Application Support/Sublime Text 3/Packages/Gulp/write_tasks_to_cache.js:31
+        throw ex;
+              ^
+TypeError: undefined is not a function
+    at Function.<anonymous> (/Users/robbin/Documents/www/chat/node_modules/laravel-elixir-browsersync/index.js:60:14)
+    at Function.<anonymous> (/Users/robbin/Documents/www/chat/node_modules/laravel-elixir/index.js:43:18)
+    at /Users/robbin/Documents/www/chat/.sublime-gulp-tmp.js:25:9
+    at Elixir (/Users/robbin/Documents/www/chat/node_modules/laravel-elixir/index.js:17:5)
+    at Object.<anonymous> (/Users/robbin/Documents/www/chat/.sublime-gulp-tmp.js:15:1)
+    at Module._compile (module.js:460:26)
+    at Object.Module._extensions..js (module.js:478:10)
+    at Module.load (module.js:355:32)
+    at Function.Module._load (module.js:310:12)
+    at Module.require (module.js:365:17)

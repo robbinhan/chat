@@ -1,3 +1,4 @@
+
 var Comment = React.createClass({displayName: "Comment",
   render: function() {
     return (
@@ -32,6 +33,9 @@ var CommentForm = React.createClass({displayName: "CommentForm",
   }
 });
 
+
+
+// tutorial3.js
 var CommentBox = React.createClass({displayName: "CommentBox",
   render: function() {
     return (

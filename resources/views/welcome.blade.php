@@ -6,77 +6,9 @@
         <script>document.write('<script src="http://' + (location.host || 'localhost')
 .split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
         <link rel="stylesheet" type="text/css" href="[% asset('css/app.css') %]">
-        <style type="text/css">
-        .dropdown-menu {
-            display: block;
-        }
-
-        #form  {
-            position: fixed;
-            bottom: 0px;
-        }
-
-        .img-rounded {
-            width: 40px;
-            height: 25px;
-        }
-        .col-xs-3,.col-md-2 {
-            padding-left: 0px;
-            padding-right: 0px;
-        }
-
-        .pane {
-            border: 1px solid black;
-            max-height: 50px;
-        }
-        </style>
     </head>
     <body id="im">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-3 col-md-2">
-                <div class="list-group">
-                    <a v-repeat="user in userList" class="list-group-item" v-class="active : user.status"
-                        v-on="click:sendPrivateMessage(user)" >{{ user.real_name }}
-                    </a>
-                </div>
-            </div>
-            <div class="col-xs-9 col-md-10">
-                <div id="content">
-                    <div v-repeat="messages" >
-                        <div class="container">
-                            <div class="row">
-                                <img class="img-rounded" src="[% asset('img/cowboy-icon.png') %]">{{ user }}
-                            </div>
-                            <div>
-                                <div>{{ content }}</div>
-                                <div class="col-md-1 pane" v-if="ticketInfo.name">
-                                    <div>{{ticketInfo.name}}</div>
-                                    <div >{{ticketInfo.desc}}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" id="form">
-                    <form  v-on="submit:sendMessage">
-                        <div class="input-group dropup">
-                            <input v-model="postMessage"  class="form-control" id="postMessage">
-                            <ul class="dropdown-menu" v-class="hidden : atUserUlHidden">
-                                <li v-repeat="user in userList | filterBy atuser"><a href="#" v-on="click:sendPrivateMessage(user)">{{ user.real_name }}</a></li>
-                            </ul>
-
-                            <ul class="dropdown-menu" v-class="hidden : atUserTicketHidden">
-                                <li v-repeat="ticket in userTickets | filterBy atticket"><a href="#" v-on="click:sendMessagebByTicket(ticket)">{{ ticket.name }}</a></li>
-                            </ul>
-                            <span class="input-group-btn">
-                                <input class="btn btn-success" type="submit" value="发送" >
-                            </span>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+    
     </div>
     
     <script type="text/javascript" src="[% asset('js/vendor.js') %]"></script>

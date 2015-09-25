@@ -15,6 +15,7 @@ class Message extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
             $table->string('username');
+            $table->string('sendto_username');
             $table->string('content');
             $table->timestamps();
         });

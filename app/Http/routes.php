@@ -39,4 +39,8 @@ get('/messages',function () {
 	return response()->json(Message::all());
 });
 
+get('/messages/privateMessage/{sendto_username}',function ($sendto_username) {
+	return response()->json(Message::where('sendto_username', $sendto_username)->get());
+});
+
 post('post/store', 'App\Http\Controllers\PostController@store');
