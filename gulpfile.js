@@ -1,7 +1,9 @@
-var elixir = require('laravel-elixir');
-var BrowserSync = require('laravel-elixir-browsersync2');
-var gulp = require('gulp');
-var react = require('gulp-react');
+var elixir = require('laravel-elixir'),
+    BrowserSync = require('laravel-elixir-browsersync2'),
+    gulp = require('gulp'),
+    reactify = require('reactify'),
+    browserify = require('browserify'),
+    source = require('vinyl-source-stream');
 
 /**
  * 编译jsx文件到public目录，gulp需要使用根目录起始，elixir使用相对的assets目录起始
@@ -12,9 +14,14 @@ elixir.extend('buildJsx',function () {
 	gulp.watch("resources/assets/js/jsx/*",["build-jsx"]);
 
 	gulp.task('build-jsx', function () {
-	    return gulp.src("resources/assets/js/jsx/*")
-	        .pipe(react())
-	        .pipe(gulp.dest('public/js/'));
+    browserify({
+      entries: ['im.js'],
+      basedir: 'resources/assets/js/jsx/'
+    })
+    .transform('reactify')
+    .bundle()
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('public/js/'));
 	});
 })
 
@@ -30,22 +37,19 @@ elixir.extend('buildJsx',function () {
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+  mix.sass('app.scss');
 
-    mix.scripts([
-    	'/react/react.min.js',
-    	'/react/JSXTransformer.js',
-    	'/socket.io/socket.io.js'
-    ], 'public/js/vendor.js');
+  mix.scripts([
+  	'/react/react.min.js',
+  	'/react/JSXTransformer.js',
+  	'/socket.io/socket.io.js'
+  ], 'public/js/vendor.js');
 
-    mix.buildJsx();
+  mix.buildJsx();
 
-    BrowserSync.init();
-    mix.BrowserSync({
-        proxy           : "localhost:8000",
-        logPrefix       : "Laravel Eixir BrowserSync",
-        logConnections  : false,
-        reloadOnRestart : false,
-        notify          : false
-    }, ['public/*/*']);
+  BrowserSync.init();
+  mix.BrowserSync({
+    proxy           : "0.0.0.0:8000",
+    logPrefix       : "Laravel Eixir BrowserSync"
+  }, ['public/*/*']);
 });

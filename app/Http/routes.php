@@ -15,8 +15,6 @@ use App\Message;
 */
 
 Route::get('/', function () {
-    Blade::setContentTags('[%', '%]');
-
     return view('welcome');
 });
 
