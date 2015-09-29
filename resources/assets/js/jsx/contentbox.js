@@ -1,15 +1,13 @@
-import { Component } from 'react';
-
-class User extends Component {
-  render() {
+var User = React.createClass({
+  render: function() {
     return (
       <a className="list-group-item">{this.props.name}</a>
     );
   }
-}
+});
 
-class UserList extends Component {
-  render() {
+var MessageList = React.createClass({
+  render: function() {
     var userNodes = this.props.data.map(function (user) {
       return (
         <User name={user.name} />
@@ -21,12 +19,13 @@ class UserList extends Component {
       </div>
     );
   }
-}
+});
 
-class UserBox extends Component {
-
-  componentDidMount() {
-    console.log("props",this.props)
+var ContentBox = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  componentDidMount: function() {
     var that = this;
     fetch(that.props.url)
     .then(function(response) {
@@ -36,17 +35,15 @@ class UserBox extends Component {
     }).catch(function(ex) {
       console.log('parsing failed', ex)
     })
-  }
-
-  render() {
-    console.log("render props",this.props)
+  },
+  render: function() {
     return (
-      <div className="userBox">
-        <h1>用户列表</h1>
-        // <UserList data={this.state.data} />
+      <div className="contentBox">
+        <h1>消息列表</h1>
+        <MessageList data={this.state.data} />
       </div>
     );
   }
-}
+});
 
-export default UserBox;
+module.exports = ContentBox;

@@ -1,7 +1,6 @@
 var elixir = require('laravel-elixir'),
     BrowserSync = require('laravel-elixir-browsersync2'),
     gulp = require('gulp'),
-    reactify = require('reactify'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream');
 
@@ -18,7 +17,7 @@ elixir.extend('buildJsx',function () {
       entries: ['im.js'],
       basedir: 'resources/assets/js/jsx/'
     })
-    .transform('reactify')
+    .transform('babelify')
     .bundle()
     .pipe(source('app.js'))
     .pipe(gulp.dest('public/js/'));
@@ -38,12 +37,6 @@ elixir.extend('buildJsx',function () {
 
 elixir(function(mix) {
   mix.sass('app.scss');
-
-  mix.scripts([
-  	'/react/react.min.js',
-  	'/react/JSXTransformer.js',
-  	'/socket.io/socket.io.js'
-  ], 'public/js/vendor.js');
 
   mix.buildJsx();
 
